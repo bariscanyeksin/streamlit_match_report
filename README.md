@@ -1,4 +1,4 @@
-#Süper Lig - Maç Raporu
+# Süper Lig - Maç Raporu
 
 Flask ile hazırlamış olduğum Süper Lig maçlarının raporlarını oluşturan uygulamayı bu kez de Streamlit ile geliştirdim. Streamlit'in sunduğu sol paneldeki sidebar sayesinde çok daha kullanıcı dostu, daha modern arayüze sahip bir web uygulaması oldu. 
 
