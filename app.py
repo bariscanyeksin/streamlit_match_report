@@ -93,6 +93,7 @@ st.markdown(
         .stDownloadButton button:hover {
             background-color: rgba(51, 51, 51, 0.65);
             border: 1px solid gray;  /* Thin gray border */
+            color: gray;  /* Text color */
         }
         .stDownloadButton button:active {
             background-color: rgba(51, 51, 51, 0.17);
