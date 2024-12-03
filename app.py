@@ -5,11 +5,8 @@ import requests
 import os
 from matplotlib import font_manager as fm
 import matplotlib.image as mpimg
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-from io import BytesIO
 from matplotlib.colors import to_rgba
 import pandas as pd
-from matplotlib.table import Table
 from PIL import Image
 from urllib.request import urlopen
 from datetime import datetime
@@ -106,6 +103,23 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+headers = {
+    'accept': '*/*',
+    'accept-language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+    'cache-control': 'no-cache',
+    'pragma': 'no-cache',
+    'priority': 'u=1, i',
+    'referer': 'https://www.fotmob.com/en-GB/leagues/71/overview/super-lig',
+    'sec-ch-ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'x-mas': 'eyJib2R5Ijp7InVybCI6Ii9hcGkvbGVhZ3Vlcz9pZD03MSZjY29kZTM9VFVSJm5ld1VlZmFCcmFja2V0PXRydWUiLCJjb2RlIjoxNzMzMjIzNzE0OTMzLCJmb28iOiI0YmQwMjY4OTgifSwic2lnbmF0dXJlIjoiOTZDOUIyM0VGN0JDRjYwOTE5QkIyMDQxN0IzRDI2NjQifQ==',
+}
+
 # Sidebar'a görsel ekleme
 image_url = "https://images.fotmob.com/image_resources/logo/leaguelogo/71.png"  # Görselin URL'si
 
@@ -147,7 +161,7 @@ primary_text_color = '#818f86'
 # API'den maç verilerini çekmek için bir fonksiyon
 def fetch_finished_matches():
     api_url = "https://www.fotmob.com/api/leagues?id=71&ccode3=TUR"
-    response = requests.get(api_url)
+    response = requests.get(api_url, headers=headers)
     data = response.json()
     allmatches = data['matches']['allMatches']
     
@@ -199,7 +213,7 @@ match_details = next(match for match in matches_by_week[selected_week] if f"{mat
 # Maç detaylarını çekmek için matchId kullan
 match_id = match_details['id']
 match_api_url = f"https://www.fotmob.com/api/matchDetails?matchId={match_id}"
-match_response = requests.get(match_api_url)
+match_response = requests.get(match_api_url, headers=headers)
 match_data = match_response.json()
 
 general_data = match_data['general']
