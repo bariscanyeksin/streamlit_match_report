@@ -117,7 +117,7 @@ headers = {
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-    'x-mas': 'eyJib2R5Ijp7InVybCI6Ii9hcGkvbGVhZ3Vlcz9pZD03MSZjY29kZTM9VFVSJm5ld1VlZmFCcmFja2V0PXRydWUiLCJjb2RlIjoxNzMzMjIzNzE0OTMzLCJmb28iOiI0YmQwMjY4OTgifSwic2lnbmF0dXJlIjoiOTZDOUIyM0VGN0JDRjYwOTE5QkIyMDQxN0IzRDI2NjQifQ==',
+    'x-mas': 'eyJib2R5Ijp7InVybCI6Ii9hcGkvbGVhZ3Vlcz9pZD03MSZjY29kZTM9VFVSJm5ld1VlZmFCcmFja2V0PXRydWUiLCJjb2RlIjoxNzMzNTk5MjI2NTUyLCJmb28iOiJlZDk5M2QwYTYifSwic2lnbmF0dXJlIjoiMTMzNTA4RDMxNENCRTE0Njk1N0NCRURGNkFGMTNBRDAifQ==',
 }
 
 # Sidebar'a görsel ekleme
