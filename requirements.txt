@@ -5,3 +5,4 @@ Pillow
 streamlit
 requests
 mplsoccer
+bs4
