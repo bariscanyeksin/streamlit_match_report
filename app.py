@@ -40,6 +40,10 @@ st.markdown(
             padding-top: 0px;
             padding-bottom: 0px;
         }
+        .stHeading {
+            margin-bottom: 5px;
+            padding-bottom: 0px;
+        }
     </style>
     """,
     unsafe_allow_html=True
