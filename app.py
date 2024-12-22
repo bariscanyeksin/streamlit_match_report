@@ -30,8 +30,15 @@ st.markdown(
         input[id^="text_input"] {
             background-color: #242C3A !important;  /* Arka plan rengi */
         }
-            h1 span[data-testid="stHeaderActionElements"], h2 span[data-testid="stHeaderActionElements"], h3 span[data-testid="stHeaderActionElements"], h4 span[data-testid="stHeaderActionElements"] {
+        h1 span[data-testid="stHeaderActionElements"], h2 span[data-testid="stHeaderActionElements"], h3 span[data-testid="stHeaderActionElements"], h4 span[data-testid="stHeaderActionElements"] {
             display: none;
+        }
+        .stAppHeader {
+            display: none;
+        }
+        .stMainBlockContainer {
+            padding-top: 0px;
+            padding-bottom: 0px;
         }
     </style>
     """,
