@@ -30,6 +30,9 @@ st.markdown(
         input[id^="text_input"] {
             background-color: #242C3A !important;  /* Arka plan rengi */
         }
+            h1 span[data-testid="stHeaderActionElements"], h2 span[data-testid="stHeaderActionElements"], h3 span[data-testid="stHeaderActionElements"], h4 span[data-testid="stHeaderActionElements"] {
+            display: none;
+        }
     </style>
     """,
     unsafe_allow_html=True
