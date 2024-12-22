@@ -248,6 +248,9 @@ fig, ax = pitch.draw(figsize=(16, 12.5), tight_layout=True)
 fig.set_facecolor('#0e1117')
 ax.axis('off')
 
+x_top = fig.add_axes([0, 0.99, 1, 0.08])
+x_top.axis('off')
+
 primary_text_color = '#818f86'
 league_id = 71
 
@@ -491,7 +494,7 @@ ax.text(52.5, 40.5, "Akan Oyunda xG", size=15, ha="center", fontproperties=prop,
 ax.text(52.5, 35.5, "İsabetli Şutta xG", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 ax.text(52.5, 30.5, "Toplam Şut", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 ax.text(52.5, 25.5, "İsabetli Şut", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
-ax.text(52.5, 20.5, "Kaçırılan Goller", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
+ax.text(52.5, 20.5, "Net Gol Fırsatı", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 ax.text(52.5, 15.5, "Topa Sahip Olma", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 
 ax.text(41, 50.5, str(tot_goals_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
@@ -517,7 +520,7 @@ ax.text(64, 55, str(awayTeamName), size=18, ha="center", fontproperties=bold_pro
 
 ax_image_1 = add_image(logo_1, fig, left=0.37, bottom=0.76, width=0.06, interpolation='hanning', alpha=0.5)
 ax_image_2 = add_image(logo_2, fig, left=0.57, bottom=0.76, width=0.06, interpolation='hanning', alpha=0.5)
-ax_image_3 = add_image(logo_3, fig, left=0.05, bottom=0.90, width=0.055, interpolation='hanning')
+ax_image_3 = add_image(logo_3, fig, left=0.05, bottom=0.95, width=0.055, interpolation='hanning')
 
 ax.legend(facecolor='None', edgecolor='None', labelcolor='white', fontsize=20, loc='lower center', ncol=3, 
         alignment='center', columnspacing=1, handletextpad=0.4, prop=prop, bbox_to_anchor=(0.5, -0.02))
@@ -526,8 +529,8 @@ plt.gcf().text(0.0137,0.198, '@bariscanyeksin', va='center', fontsize=15,
                     fontproperties=prop, color=primary_text_color, rotation=270)
 
 # Set the title
-fig.text(0.115, 0.945, homeTeamName + " " + skor + " " + awayTeamName, size=30, ha="left", fontproperties=bold_prop, color='white')
-fig.text(0.115, 0.905, matchDetailString, size=20, ha="left", fontproperties=prop, color=primary_text_color)
+fig.text(0.115, 0.995, homeTeamName + " " + skor + " " + awayTeamName, size=30, ha="left", fontproperties=bold_prop, color='white')
+fig.text(0.115, 0.955, matchDetailString, size=20, ha="left", fontproperties=prop, color=primary_text_color)
 
 ax.text(94.75, -3.43, "Veri: FotMob", size=15, fontproperties=prop, color=primary_text_color)
 
@@ -535,6 +538,117 @@ fig.text(0.075, 0.160, awayTeamName.upper() + " ŞUTLARI", size=14, ha="left", f
 fig.text(0.925, 0.160, homeTeamName.upper() + " ŞUTLARI", size=14, ha="right", fontproperties=bold_prop, color=primary_text_color)
 
 fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+
+def create_momentum_graph(match_data, fig):
+   # Momentum verilerini al
+   momentum_data = match_data['content']['momentum']['main']['data']
+   
+   # Takım renklerini al
+   team_colors = match_data['general']['teamColors']['darkMode']
+   home_color = team_colors['home']
+   away_color = team_colors['away']
+   
+   # Dakika ve değerleri ayır
+   minutes = []
+   values = []
+   for entry in momentum_data:
+       minutes.append(entry['minute'])
+       values.append(entry['value'])
+   
+   # Event verilerini al
+   match_events_data = match_data['content']['matchFacts']['events']['events']
+   # Gol olaylarını filtrele
+   goal_events = [event for event in match_events_data if event['type'] == 'Goal']
+   card_events = [event for event in match_events_data if event['type'] == 'Card']
+   redcard_events = [event for event in card_events if (event['card'] == 'Red') or (event['card'] == 'YellowRed')]
+   
+   # Gol dakikalarını ve hangi takımın attığını bulma
+   goal_minutes = [event['time'] for event in goal_events]
+   is_home_goal = [event['isHome'] for event in goal_events]
+   
+   redcard_minutes = [redcardevent['time'] for redcardevent in redcard_events]
+   is_home_redcard = [redcardevent['isHome'] for redcardevent in redcard_events]
+   
+   # Momentum grafiği için yeni bir axes oluştur
+   ax_momentum = fig.add_axes([0.6, 0.92, 0.35, 0.125])
+   
+   # Sabit y konumları belirle
+   home_event_y = 120  # Ev sahibi eventleri için üst pozisyon
+   away_event_y = -120  # Deplasman eventleri için alt pozisyon
+   
+   # Ana momentum çizgisi ve dolgu alanları için y sınırlarını belirle
+   ax_momentum.set_ylim(-1, 1)  # Momentum grafiği için normal sınırlar
+   
+   # Momentum çizgisi ve dolguları çiz
+   ax_momentum.plot(minutes, values, color='#818f86', linewidth=1)
+   ax_momentum.fill_between(minutes, values, 0, 
+                          where=[v >= 0 for v in values],
+                          color=home_color, alpha=0.3)
+   ax_momentum.fill_between(minutes, values, 0,
+                          where=[v < 0 for v in values],
+                          color=away_color, alpha=0.3)
+   
+   # Event'ler için y sınırlarını genişlet
+   ax_momentum.set_ylim(-130, 130)
+   
+   # İkonları yükle
+   ball_icon = Image.open('icons/ball.png')
+   red_card_icon = Image.open('icons/red_card.png')
+   
+   # İkon boyutları (figure birimlerinde)
+   icon_width = 0.01
+   
+   # Golleri ekle
+   for minute, is_home in zip(goal_minutes, is_home_goal):
+       y_pos = home_event_y if is_home else away_event_y
+       # Dakikayı figure koordinatlarına çevir
+       x_pos = (minute - ax_momentum.get_xlim()[0]) / (ax_momentum.get_xlim()[1] - ax_momentum.get_xlim()[0])
+       x_pos = x_pos * ax_momentum.get_position().width + ax_momentum.get_position().x0
+       y_pos = (y_pos - ax_momentum.get_ylim()[0]) / (ax_momentum.get_ylim()[1] - ax_momentum.get_ylim()[0])
+       y_pos = y_pos * ax_momentum.get_position().height + ax_momentum.get_position().y0
+       
+       add_image(ball_icon, fig, left=x_pos-icon_width/2, bottom=y_pos-icon_width/2, 
+                width=icon_width, interpolation='hanning')
+   
+   # Kırmızı kartları ekle
+   for minute, is_home in zip(redcard_minutes, is_home_redcard):
+       y_pos = home_event_y if is_home else away_event_y
+       # Dakikayı figure koordinatlarına çevir
+       x_pos = (minute - ax_momentum.get_xlim()[0]) / (ax_momentum.get_xlim()[1] - ax_momentum.get_xlim()[0])
+       x_pos = x_pos * ax_momentum.get_position().width + ax_momentum.get_position().x0
+       y_pos = (y_pos - ax_momentum.get_ylim()[0]) / (ax_momentum.get_ylim()[1] - ax_momentum.get_ylim()[0])
+       y_pos = y_pos * ax_momentum.get_position().height + ax_momentum.get_position().y0
+       
+       add_image(red_card_icon, fig, left=x_pos-icon_width/2, bottom=y_pos-icon_width/2, 
+                width=icon_width, interpolation='hanning')
+   
+   # Grafiği özelleştir
+   ax_momentum.set_facecolor('#0e1117')
+   ax_momentum.spines['top'].set_visible(False)
+   ax_momentum.spines['right'].set_visible(False)
+   ax_momentum.spines['bottom'].set_visible(False)
+   ax_momentum.spines['left'].set_visible(False)
+   
+   # x ekseni ayarları
+   ax_momentum.set_xticks([0, 45, 90])
+   ax_momentum.set_xticklabels(['0\'', '45\'', '90\''], color=primary_text_color, fontsize=8)
+   
+   ax_momentum.tick_params(axis='x', colors=primary_text_color)
+   ax_momentum.tick_params(axis='y', colors=primary_text_color)
+   
+   # y ekseni etiketlerini kaldır
+   ax_momentum.set_yticks([])
+   
+   # Izgara çizgilerini kaldır
+   ax_momentum.grid(False)
+   
+   # Orta çizgi (y=0)
+   ax_momentum.axhline(y=0, color=primary_text_color, linestyle='-', linewidth=0.5, alpha=0.3)
+   
+   return ax_momentum
+
+# Ana kod içinde, pitch çiziminden sonra:
+momentum_ax = create_momentum_graph(match_data, fig)
 
 ax.axis('off')
 # Görseli göster
