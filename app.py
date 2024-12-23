@@ -595,11 +595,11 @@ def create_momentum_graph(match_data, fig):
    # Momentum çizgisi ve dolguları çiz
    ax_momentum.plot(minutes, values, color='#818f86', linewidth=1)
    ax_momentum.fill_between(minutes, values, 0, 
-                          where=[v >= 0 for v in values],
-                          color=home_color, alpha=0.3)
+                          where=[v > 0 for v in values],
+                          color=home_color, alpha=0.5, interpolate=True)
    ax_momentum.fill_between(minutes, values, 0,
                           where=[v < 0 for v in values],
-                          color=away_color, alpha=0.3)
+                          color=away_color, alpha=0.5, interpolate=True)
    
    # Event'ler için y sınırlarını genişlet
    ax_momentum.set_ylim(-130, 130)
