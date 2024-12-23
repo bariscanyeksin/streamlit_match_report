@@ -593,13 +593,13 @@ def create_momentum_graph(match_data, fig):
    ax_momentum.set_ylim(-1, 1)  # Momentum grafiği için normal sınırlar
    
    # Momentum çizgisi ve dolguları çiz
-   ax_momentum.plot(minutes, values, color='#818f86', linewidth=1)
+   ax_momentum.plot(minutes, values, color='#818f86', zorder=2, linewidth=1)
    ax_momentum.fill_between(minutes, values, 0, 
                           where=[v > 0 for v in values],
-                          color=home_color, alpha=0.5, interpolate=True)
+                          color=home_color, alpha=0.5, zorder=2, interpolate=True)
    ax_momentum.fill_between(minutes, values, 0,
                           where=[v < 0 for v in values],
-                          color=away_color, alpha=0.5, interpolate=True)
+                          color=away_color, alpha=0.5, zorder=2, interpolate=True)
    
    # Event'ler için y sınırlarını genişlet
    ax_momentum.set_ylim(-130, 130)
@@ -634,7 +634,21 @@ def create_momentum_graph(match_data, fig):
        
        add_image(red_card_icon, fig, left=x_pos-icon_width/2, bottom=y_pos-icon_width/2, 
                 width=icon_width, interpolation='hanning')
+
+   # Önce event çizgilerini çiz (y=0'dan event pozisyonuna kadar)
+   for minute, is_home in zip(goal_minutes, is_home_goal):
+       y_pos = home_event_y if is_home else away_event_y
+       # Çizgiyi y=0'dan event pozisyonuna kadar çiz
+       ax_momentum.vlines(x=minute, ymin=0, ymax=y_pos,
+                        color=primary_text_color, linestyle='--', 
+                        alpha=0.5, zorder=1, linewidth=0.8)
    
+   for minute, is_home in zip(redcard_minutes, is_home_redcard):
+       y_pos = home_event_y if is_home else away_event_y
+       # Çizgiyi y=0'dan event pozisyonuna kadar çiz
+       ax_momentum.vlines(x=minute, ymin=0, ymax=y_pos,
+                        color=primary_text_color, linestyle='--', 
+                        alpha=0.5, zorder=1, linewidth=0.8)
    # Grafiği özelleştir
    ax_momentum.set_facecolor('#0e1117')
    ax_momentum.spines['top'].set_visible(False)
