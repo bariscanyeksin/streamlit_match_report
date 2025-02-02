@@ -358,6 +358,22 @@ bigchances_bilgisi = pd.DataFrame(match_data["content"]["stats"]["Periods"]["All
 bigchances_1 = bigchances_bilgisi["stats"][0]
 bigchances_2 = bigchances_bilgisi["stats"][1]
 
+def get_touches_in_opp_box(data):
+    periods = data.get("stats", {}).get("Periods", {}).get("All", {}).get("stats", [])
+    
+    for category in periods:
+        stats_list = category.get("stats", [])
+        for stat in stats_list:
+            if stat.get("key") == "touches_opp_box":
+                return stat.get("stats")
+    
+    return None
+
+content_data = match_data['content']
+touches_in_opp_box = get_touches_in_opp_box(content_data)
+rcs_1 = touches_in_opp_box[0]
+rcs_2 = touches_in_opp_box[1]
+
 IMAGE_URL_1 = 'https://images.fotmob.com/image_resources/logo/teamlogo/' + str(homeTeamId) + '.png'
 logo_1 = Image.open(urlopen(IMAGE_URL_1))
 IMAGE_URL_2 = 'https://images.fotmob.com/image_resources/logo/teamlogo/' + str(awayTeamId) + '.png'
@@ -504,28 +520,31 @@ back_box_2 = dict(boxstyle='round, pad=0.4', facecolor='#facd5c', alpha=0.5)
 ax.text(52.5, 50.5, "Gol", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 ax.text(52.5, 45.5, "Gol Beklentisi (xG)", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 ax.text(52.5, 40.5, "Akan Oyunda xG", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
-ax.text(52.5, 35.5, "İsabetli Şutta xG", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
-ax.text(52.5, 30.5, "Toplam Şut", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
-ax.text(52.5, 25.5, "İsabetli Şut", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
-ax.text(52.5, 20.5, "Net Gol Fırsatı", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
+#ax.text(52.5, 35.5, "İsabetli Şutta xG", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
+ax.text(52.5, 35.5, "Toplam Şut", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
+ax.text(52.5, 30.5, "İsabetli Şut", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
+ax.text(52.5, 25.5, "Net Gol Fırsatı", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
+ax.text(52.5, 20.5, "RCS Topla Buluşma", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 ax.text(52.5, 15.5, "Topa Sahip Olma", size=15, ha="center", fontproperties=prop, bbox=back_box, color='black')
 
 ax.text(41, 50.5, str(tot_goals_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 ax.text(41, 45.5, str(xg_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 ax.text(41, 40.5, str(xgop_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(41, 35.5, str(xgot_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(41, 30.5, str(tot_shots_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(41, 25.5, str(shots1_ot), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(41, 20.5, str(bigchances_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+#ax.text(41, 35.5, str(xgot_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(41, 35.5, str(tot_shots_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(41, 30.5, str(shots1_ot), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(41, 25.5, str(bigchances_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(41, 20.5, str(rcs_1), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 ax.text(41, 15.5, str(pozisyon_1)+"%", size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 
 ax.text(64, 50.5, str(tot_goals_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 ax.text(64, 45.5, str(xg_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 ax.text(64, 40.5, str(xgop_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(64, 35.5, str(xgot_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(64, 30.5, str(tot_shots_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(64, 25.5, str(shots2_ot), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
-ax.text(64, 20.5, str(bigchances_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+#ax.text(64, 35.5, str(xgot_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(64, 35.5, str(tot_shots_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(64, 30.5, str(shots2_ot), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(64, 25.5, str(bigchances_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
+ax.text(64, 20.5, str(rcs_2), size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 ax.text(64, 15.5, str(pozisyon_2)+"%", size=15, ha="center", fontproperties=prop, bbox=back_box_2, color='black')
 
 ax.text(41, 55, str(homeTeamName), size=18, ha="center", fontproperties=bold_prop, color='white', alpha=0.5)
